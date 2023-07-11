@@ -13,12 +13,13 @@ from .serializer import LabInfoSerializer,PatientUserSerializer
 # Create your views here.
 User = get_user_model()
 
-class LabUserAuthenticationView(viewsets.ViewSet):
+class UserAuthenticationView(viewsets.ViewSet):
     
-    def labuser_authentication(self, request):
+    def user_authentication(self, request):
         try:
             username = request.POST.get('username')
             password = request.POST.get('password')
+            usertype = request.POST.get('usertype')
             # Authenticate the user based on the provided username and password
             user = authenticate(request, username=username, password=password)
             if user is not None:
@@ -30,12 +31,22 @@ class LabUserAuthenticationView(viewsets.ViewSet):
                         session_key = request.COOKIES['sessionid']
                     else:
                         session_key = None
-                    try:
-                        labuser = LabUser.objects.get(user=user)
-                        labid = labuser.labid.labid
-                        return JsonResponse({'session_id': session_key, 'labid': labid, 'message': 'User authenticated successfully'})
-                    except LabUser.DoesNotExist:
-                        return JsonResponse({'error': 'User is not a LabUser'}, status=500)
+                    if usertype == 'labuser':
+                        try:
+                            labuser = LabUser.objects.get(user=user)
+                            labid = labuser.labid.labid
+                            return JsonResponse({'session_id': session_key, 'labid': labid, 'message': 'User authenticated successfully'})
+                        except LabUser.DoesNotExist:
+                            return JsonResponse({'error': 'User is not a LabUser'}, status=500)
+                    elif usertype == 'patient':
+                        try:
+                            patientuser = PatientUser.objects.get(user=user)
+                            patientid = patientuser.patientid
+                            return JsonResponse({'patientid':patientid,'session_id': session_key,'message': 'User authenticated successfully'})
+                        except PatientUser.DoesNotExist:
+                            return JsonResponse({'error': 'User is not a PatientUser'}, status=500)
+                    else:
+                        return JsonResponse({'error': 'Usertype not specified'}, status=500)
                 else:
                     return JsonResponse({'error': 'User account is not active'}, status=500)
             else:

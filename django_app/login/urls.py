@@ -1,12 +1,10 @@
 from django.urls import re_path
-from .views import PatientUserAuthenticationView,LabUserAuthenticationView,LabUserCreateView,LabInfoListView,\
+from .views import UserAuthenticationView,LabUserCreateView,LabInfoListView,\
         PatientUserViewSet,UsernmaeViaSessionsViewSet
         
 login_url_patterns = [
-    re_path(r'^login-labuser/$', LabUserAuthenticationView.as_view({'post': 'labuser_authentication'}),
-            name='login_labuser'),
-    re_path(r'^login-patientuser/$', PatientUserAuthenticationView.as_view({'post': 'patientuser_authentication'}),
-            name='login_patientuser'),
+    re_path(r'^login/$', UserAuthenticationView.as_view({'post': 'user_authentication'}),
+            name='login'),
     re_path(r'^create-labuser/$', LabUserCreateView.as_view({'post': 'createLabUser'}),
                 name='create_labuser'),
     re_path(r'^labinfo-details/$', LabInfoListView.as_view({'get': 'get_labinfo'}),
