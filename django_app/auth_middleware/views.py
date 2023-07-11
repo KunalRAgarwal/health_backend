@@ -9,7 +9,8 @@ class SessionMiddleware:
     def __call__(self, request):
         current_url = resolve(request.path_info).url_name
         print(current_url)
-        if 'login' in current_url or 'admin' in current_url or  '/admin' in request.path_info:
+        if 'login' in current_url or 'admin' in current_url or  '/admin' in request.path_info or \
+            'create-labuser' in current_url:
             response = self.get_response(request)
             print("**************************************************************************")
             return response

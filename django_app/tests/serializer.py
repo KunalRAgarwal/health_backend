@@ -7,13 +7,9 @@ class TestSerializer(serializers.ModelSerializer):
         fields = ['testid', 'name', 'price']
 
 class TestsConductedSerializer(serializers.ModelSerializer):
-    test = TestSerializer(source='testid', read_only=True)
+    billid = serializers.PrimaryKeyRelatedField(source='billid.id', read_only=True)
+    test = serializers.PrimaryKeyRelatedField(source='testid.name', read_only=True)
 
     class Meta:
         model = TestsConducted
         fields = ['id', 'billid', 'test', 'price']
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['billid'] = instance.billid.id
-        return representation
