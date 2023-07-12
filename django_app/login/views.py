@@ -17,19 +17,21 @@ class UserAuthenticationView(viewsets.ViewSet):
     
     def user_authentication(self, request):
         try:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            usertype = request.POST.get('usertype')
+            username = request.data.get('username')
+            password = request.data.get('password')
+            usertype = request.data.get('usertype')
             # Authenticate the user based on the provided username and password
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 
                 if user.is_active:
-                    # Login the user
+                   
                     login(request, user)
-                    if 'sessionid' in request.COOKIES:
-                        session_key = request.COOKIES['sessionid']
-                    else:
+        
+                    try:
+                        session_key = request.session.session_key
+                    except Exception as e:
+                        print(traceback.format_exc())
                         session_key = None
                     if usertype == 'labuser':
                         try:
@@ -116,7 +118,7 @@ class LabUserCreateView(viewsets.ViewSet):
         except Exception as e:
             print(e)
             print(traceback.format_exc())
-            return JsonResponse({'message': str(traceback.format_exc())}, status=500)
+            return JsonResponse({'error': str(traceback.format_exc())}, status=500)
 
 class LabInfoListView(viewsets.ViewSet):
     def get_labinfo(self, request):
@@ -129,7 +131,7 @@ class LabInfoListView(viewsets.ViewSet):
         except Exception as e:
             print(e)
             print(traceback.format_exc())
-            return JsonResponse({'message': str(traceback.format_exc())}, status=500)
+            return JsonResponse({'error': "Server Error"}, status=500)
 
 class PatientUserViewSet(generics.ListAPIView):
     queryset = PatientUser.objects.all()

@@ -15,14 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,re_path
 from django.urls import include
 from login.urls import login_url_patterns
 from tests.urls import test_url_patterns
 from bills.urls import bill_url_patterns
+from django.views.generic import TemplateView
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(login_url_patterns)),
     path('api/', include(bill_url_patterns)),
+    path('api/',include(test_url_patterns)),
+    re_path(r".*", TemplateView.as_view(template_name="index.html")) # RegExpr: any character is correct
 ]
