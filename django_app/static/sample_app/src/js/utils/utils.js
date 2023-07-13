@@ -1,5 +1,6 @@
 import axios from "axios";
 import { _readCookie,_eraseCookie,_createCookie } from "../network/network";
+axios.defaults.withCredentials = true;
 const makeAPICallForGet = async (api_url, payload) => {
     var data = [];
     try {

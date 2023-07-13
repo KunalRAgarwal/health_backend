@@ -14,7 +14,6 @@ from .serializer import LabInfoSerializer,PatientUserSerializer
 User = get_user_model()
 
 class UserAuthenticationView(viewsets.ViewSet):
-    
     def user_authentication(self, request):
         try:
             username = request.data.get('username')
@@ -123,7 +122,8 @@ class LabUserCreateView(viewsets.ViewSet):
 class LabInfoListView(viewsets.ViewSet):
     def get_labinfo(self, request):
         try:
-            lab_info_list = LabInfo.objects.all()
+            labid = self.request.query_params.get('labid')
+            lab_info_list = LabInfo.objects.filter(labid=labid)
             paginator = PageNumberPagination()
             paginated_lab_info = paginator.paginate_queryset(lab_info_list, request)
             serializer = LabInfoSerializer(paginated_lab_info, many=True)
@@ -133,6 +133,20 @@ class LabInfoListView(viewsets.ViewSet):
             print(traceback.format_exc())
             return JsonResponse({'error': "Server Error"}, status=500)
 
+
+class AllLabInfoListView(viewsets.ViewSet):
+    def get_all_labinfo(self, request):
+        try:
+            lab_info_list = LabInfo.objects.all()
+            paginator = PageNumberPagination()
+            paginated_lab_info = paginator.paginate_queryset(lab_info_list, request)
+            serializer = LabInfoSerializer(paginated_lab_info, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
+            return JsonResponse({'error': "Server Error"}, status=500)
+        
 class PatientUserViewSet(generics.ListAPIView):
     queryset = PatientUser.objects.all()
     serializer_class = PatientUserSerializer
@@ -140,14 +154,17 @@ class PatientUserViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         try:
-            labid = self.request.query_params.get('labid')
-            queryset = PatientUser.objects.filter(labid=labid)
+            user = self.request.user
+            labuser = LabUser.objects.filter(user=user).first()
+            print(labuser.labid)
+            queryset = PatientUser.objects.filter(labid=labuser.labid)
             return queryset
         except Exception as e:
             print(e)
             print(traceback.format_exc())
             return JsonResponse({'message': str(traceback.format_exc())}, status=500)
 
+#Get user name from session code
 class UsernmaeViaSessionsViewSet(viewsets.ViewSet):
     
     def knowusername(self,request):
@@ -157,5 +174,5 @@ class UsernmaeViaSessionsViewSet(viewsets.ViewSet):
         except Exception as e:
             print(e)
             print(traceback.format_exc())
-            return JsonResponse({'message': str(traceback.format_exc())}, status=500)
+            return JsonResponse({'message': str(traceback.format_exc())}, status=403)
     

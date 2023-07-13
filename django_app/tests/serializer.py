@@ -12,4 +12,4 @@ class TestsConductedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TestsConducted
-        fields = ['id', 'billid', 'test', 'price']
+        fields = ['id', 'billid', 'test','price','created_on']

@@ -57,6 +57,8 @@ class ViewAllBills(generics.ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        patientid = self.request.query_params.get('patientid')
+        user = self.request.user
+        patient_user = PatientUser.objects.filter(user=user).first()
+        patientid = patient_user.patientid
         queryset = Bills.objects.filter(patientid=patientid)
         return queryset

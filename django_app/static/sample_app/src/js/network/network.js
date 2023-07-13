@@ -31,7 +31,7 @@ var id = queryParams.get("client_idn");
 var api_prefix = "";
 var api_url = "";
 var IA_URL = "";
-api_prefix = " http://127.0.0.1:8000";
+// api_prefix = " http://localhost:8000";
 
 var api_header = {
     Authorization: "Token " + _readCookie("auth_token"),

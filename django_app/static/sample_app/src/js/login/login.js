@@ -41,6 +41,16 @@ const LoginPage = () => {
     }
     try{
       var api_call= await makeAPICallForPost(api_prefix+URL_DICTIONARY.LOGIN_URL,payload)
+      if (userType == 'patient')
+      {
+        navigate("/patient")
+      }
+      else if (userType == 'labuser')
+      {
+        navigate("/labuser")
+
+      }
+      
     }
     catch(err){
       setAlertMessage(err.message)
@@ -79,9 +89,9 @@ const LoginPage = () => {
           </h3>
           <h4
             style={{
-              "font-weight": "400",
-              "margin-top": "15px",
-              "margin-bottom": "25px",
+              "fontWeight": "400",
+              "marginTop": "15px",
+              "marginBottom": "25px",
               marginLeft: "11%",
             }}
           >

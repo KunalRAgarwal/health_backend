@@ -12,8 +12,9 @@ class SessionMiddleware:
         if current_url is not None:
             if 'login' in current_url or 'admin' in current_url or  '/admin' in request.path_info or \
                 'create' in current_url or 'labinfo' in current_url:
+                print("Hello")
                 response = self.get_response(request)
-                print("**************************************************************************")
+                print("***************************response***********************************************")
                 return response
             else:
                 print("******************************In-Else********************************************")

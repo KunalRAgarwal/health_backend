@@ -1,6 +1,8 @@
+import datetime
 from django.db import models
 from login.models import LabInfo
 from bills.models import Bills
+# import datetime
 
 class Test(models.Model):
     testid = models.AutoField(primary_key=True)
@@ -15,6 +17,7 @@ class TestsConducted(models.Model):
     billid = models.ForeignKey(Bills, on_delete=models.CASCADE)
     testid = models.ForeignKey(Test, on_delete=models.CASCADE)
     price = models.IntegerField()
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         test = self.testid

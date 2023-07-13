@@ -11,7 +11,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router";
 
 const SignupPage = () => {
-  const [userType, setUserType] = useState("patient");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [secretcode, setSecretCode] = useState("");
@@ -24,12 +23,12 @@ const SignupPage = () => {
 
     var makeAPICall = async() => {
       try{
-      var lab_info_api = await makeAPICallForGet(api_prefix+URL_DICTIONARY.LAB_INFO_URL,{});
+      var lab_info_api = await makeAPICallForGet(api_prefix+URL_DICTIONARY.GET_ALL_LAB_INFO,{});
       var complete_data=[];
       complete_data=lab_info_api.data.results
       while(lab_info_api.data.next)
       {
-        var lab_info_api = await makeAPICallForGet(lab_info_api.data.next,{});
+        lab_info_api = await makeAPICallForGet(lab_info_api.data.next,{});
         complete_data=complete_data.concat(lab_info_api.data.results);
       }
       var options = [];
