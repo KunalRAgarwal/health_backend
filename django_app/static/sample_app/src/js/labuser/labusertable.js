@@ -11,7 +11,6 @@ const LabTable = (props) => {
     var makeAPICall = () => {
       var data = [];
       try {
-        console.log(props.data);
         for (var i = 0; i < props.data.length; i++) {
           data.push({
             name: props.data[i].name,
@@ -47,7 +46,7 @@ const LabTable = (props) => {
     },
     {
       name: "Price",
-      selector: (row) => row.price+" Rs.",
+      selector: (row) => row.price + " Rs.",
       sortable: true,
       conditionalCellStyles: [
         {
@@ -65,25 +64,24 @@ const LabTable = (props) => {
       ],
     },
   ];
-  if(tableData.length>0){
-  return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <h6>Selected Tests</h6>
+  if (tableData.length > 0) {
+    return (
+      <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h6>Selected Tests</h6>
+        </div>
+        <DataTable columns={columns} data={tableData} pagination />
       </div>
-      <DataTable columns={columns} data={tableData} pagination />
-    </div>
-  );}
-  else{
-    return null
-}
-  
+    );
+  } else {
+    return null;
+  }
 };
 
 export default LabTable;

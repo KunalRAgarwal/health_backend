@@ -21,7 +21,7 @@ from login.urls import login_url_patterns
 from tests.urls import test_url_patterns
 from bills.urls import bill_url_patterns
 from django.views.generic import TemplateView
-
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
@@ -29,5 +29,6 @@ urlpatterns = [
     path('api/', include(login_url_patterns)),
     path('api/', include(bill_url_patterns)),
     path('api/',include(test_url_patterns)),
+    # re_path(r"^login/$", TemplateView.as_view(template_name="index.html")),
     re_path(r".*", TemplateView.as_view(template_name="index.html")) # RegExpr: any character is correct
 ]

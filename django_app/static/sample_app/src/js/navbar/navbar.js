@@ -43,7 +43,7 @@ const NavbarComponent = () =>{
       </div>
       <div>
         <Nav>
-          <NavDropdown title={<h5 style={{ color: "white" ,marginRight:"0%"}}>Welcome back,{name} !!</h5>}>
+          <NavDropdown style={{marginLeft:"100%"}}title={<h5 style={{ color: "white" ,marginRight:"0%"}}>Welcome back,{name} !!</h5>}>
             <NavDropdown.Item onClick={(e) => Logout(e)}>Logout</NavDropdown.Item>
           </NavDropdown>
         </Nav>
@@ -51,9 +51,6 @@ const NavbarComponent = () =>{
     </div>
   </Container>
 </Navbar>
-
-
-
         </div>
     )
 }

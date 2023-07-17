@@ -81,7 +81,6 @@ const SignupPage = () => {
     navigate("/login");
     }
     catch (err) {
-          console.log(err);
           setAlertMessage(err.message)
           setOpen(true)
         }

@@ -3,6 +3,9 @@ from rest_framework.pagination import PageNumberPagination
 from .models import Test
 from .serializer import TestSerializer
 from login.models import LabUser
+################################################################
+#Get tests info based on a specific lab
+################################################################
 class TestListView(generics.ListAPIView):
     queryset = Test.objects.all()
     serializer_class = TestSerializer
@@ -13,8 +16,6 @@ class TestListView(generics.ListAPIView):
         labuser = LabUser.objects.filter(user=user).first()
         queryset = super().get_queryset()
         labid = labuser.labid if labuser else None  # Retrieve the labid or set it to None if labuser is not found
-        print(labuser.user)
-        print("****************LabID****************", labid)
         if labid:
             queryset = queryset.filter(labid__labid=labid.labid)
         return queryset

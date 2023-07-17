@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # 'auth_middleware.views.SessionMiddleware'
+    # 'auth_middleware.views.SessionExpiredMiddleware'
 ]
 
 REST_FRAMEWORK = {
@@ -174,6 +174,11 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:8000"]
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# SESSION_COOKIE_AGE = 60
+
+# SESSION_EXPIRED_REDIRECT = '/login/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

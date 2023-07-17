@@ -14,7 +14,6 @@ const makeAPICallForGet = async (api_url, payload) => {
         data = apidata;
         return data;
     } catch (message) {
-            console.error(message);
             return "errror_in_api";
     }
 };
@@ -30,12 +29,14 @@ const makeAPICallForPost = async (api_url, payload) => {
         data = apidata;
         return data;
     } catch (message) {
-            if (message.response.data.error)
+       
+            if (message.response.data.message)
             {
-                throw new Error(message.response.data.error);
+                throw new Error(message.response.data.message);
             }
+            else{
             throw new Error("Server error")
-            
+            }
     }
 };
 const makeAPICallForPostFileUpload = async (api_url, payload) => {

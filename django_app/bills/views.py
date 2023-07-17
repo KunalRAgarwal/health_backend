@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from .models import Bills
-from login.models import PatientUser
+from login.models import PatientUser,LabUser
 from tests.models import TestsConducted
 from django.http import JsonResponse
 import traceback
@@ -11,27 +11,42 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from .serializer import BillSerializer
 
+
+################################################################
+#View to create a new Bill for the a new/old Patient
+################################################################
+
 class CreateBill(viewsets.ViewSet):
     @transaction.atomic
     def create_bill(self, request):
         try:
-            
-            labid = request.POST.get('labid')
-            totalprice = request.POST.get('totalprice')
-            testconducted_ids = request.POST.get('testconducted_ids')
+            user = request.user
+            labid = LabUser.objects.filter(user=user).values_list('labid', flat=True).first()
+            totalprice = request.data.get('totalprice')
+            testconducted_ids = request.data.get('testconducted_ids')
             testconducted_ids = testconducted_ids.split(',')
 
-            
-            if 'patientid' in request.POST:
-                patientid = request.POST.get('patientid')
+            if 'patientid' in request.data:
+                patientid = request.data.get('patientid')
             else:
+                username = request.data.get('username')
+                try:
+                    userexists = User.objects.get(username=username)
+                    if(userexists):
+                        return JsonResponse({'message': 'Username already exist'}, status=500)
+                except User.DoesNotExist:
+                    pass
+               
                 
-                username = request.POST.get('username')
-                email=request.POST.get('email')
-                name=request.POST.get('name')
-                phone=request.POST.get('phone')
+                
+                email=request.data.get('email')
+                name=request.data.get('name')
+                phone=request.data.get('phone')
+                
+               
                 user = User.objects.create_user(username=username, password='livehealth')
-                patient_user = PatientUser.objects.create(user=user,labid_id=labid,email=email,phone=phone)
+                patient_user = PatientUser.objects.create(user=user,labid_id=labid,email=email\
+                    ,phone=phone,name=name)
                 patientid = patient_user.patientid
                 
 
@@ -51,6 +66,9 @@ class CreateBill(viewsets.ViewSet):
             print(traceback.format_exc())
             return JsonResponse({'message': str(traceback.format_exc())}, status=500)
 
+################################################################
+#View to get a list of all bill orders of a certain patient
+################################################################
 class ViewAllBills(generics.ListAPIView):
     queryset = Bills.objects.all()
     serializer_class = BillSerializer

@@ -7,7 +7,8 @@ var URL_DICTIONARY=
     'GET_BILLING_INFO':'/api/patient-allbills/',
     'GET_TESTS_OF_LAB':"/api/testlist/",
     'GET_PATIENTS_OF_LABS':"/api/patient-details/",
-    'GET_ALL_LAB_INFO': "/api/labinfo-details-all/"
+    'GET_ALL_LAB_INFO': "/api/labinfo-details-all/",
+    'CREATE_BILL':"/api/create-bill/",
 }
 
 export default URL_DICTIONARY
